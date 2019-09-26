@@ -13,7 +13,7 @@ WHERE
   SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en" }
 } ORDER BY ?motiveLabel'
 
-df <- query_wikidata(sparql_query)
+df <- query_wikidata(sparql_query, "simple")
 df2 <- as.data.frame(df)
 #View(df2)
 
