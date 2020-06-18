@@ -18,14 +18,12 @@ sparql_query <- 'SELECT * WHERE {
 }
 ORDER BY (?label)'
 
-df <- query_wikidata(sparql_query, "simple")
-df2 <- as.data.frame(df)
-#View(df2)
+df <- query_wikidata(sparql_query, "simple") # from the query_wikidata help: "simple" uses CSV and returns pure character data frame
 
 library(ggplot2)
 
 ggplot()+
-  geom_bar(data = df2, aes(x = stateLabel, fill = stateLabel))+
+  geom_bar(data = df, aes(x = stateLabel, fill = stateLabel))+
   labs(y = "count", x = "",
        fill = "states")+
   theme_dark()
