@@ -20,13 +20,18 @@ SELECT ?label ?coord ?subj ?image ?state ?stateLabel WHERE {
 }'
 
 df <- query_wikidata(sparql_query, "simple")
-df2 <- as.data.frame(df)
-#View(df2)
+#View(df)
 
 library(ggplot2)
 
+library(tidyverse)
+df %>% 
+  count(stateLabel) %>% 
+  mutate(perc = n*100 / nrow(df)) -> df2  
+
 ggplot()+
-  geom_bar(data = df2, aes(x = stateLabel, fill = stateLabel))+
+  geom_col(data = df2, aes(x = reorder(stateLabel, perc), y = n, fill = stateLabel))+
   labs(y = "count",
-       fill = "state")+
-  theme_dark()
+       fill = "state",
+       x = "state")+
+  theme(axis.text.x = element_text(angle = 45))

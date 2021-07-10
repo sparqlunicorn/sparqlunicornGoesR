@@ -19,13 +19,12 @@ sparql_query <- 'SELECT ?item ?itemLabel ?motive ?motiveLabel ?pic WHERE {
 ORDER BY (?motiveLabel)'
 
 df <- query_wikidata(sparql_query, "simple")
-df2 <- as.data.frame(df)
-#View(df2)
+#View(df)
 
 library(ggplot2)
 
 ggplot()+
-  geom_bar(data = df2, aes(x = motiveLabel, fill = motiveLabel))+
+  geom_bar(data = df, aes(x = motiveLabel, fill = motiveLabel))+
   labs(y = "count",
        fill = "motive")+
   theme_dark()

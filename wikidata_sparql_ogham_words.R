@@ -20,14 +20,29 @@ sparql_query <- 'SELECT * WHERE {
 }
 ORDER BY (?label)'
   
-  df <- query_wikidata(sparql_query, "simple")
-  df2 <- as.data.frame(df)
-  #View(df2)
-  
-  library(ggplot2)
-  
-  ggplot()+
-    geom_bar(data = df2, aes(x = inscriptionmentionsLabel, fill = inscriptionmentionsLabel))+
-    labs(y = "count", x = "inscription mentions",
-         fill = "mentioned words")+
-    theme_dark()
+  df <- query_wikidata(sparql_query, "simple") # is already a dataframe
+  #View(df)
+
+  # create a more barplot with percentage of mentions on top of actual count of words.  
+library(ggplot2)
+library(tidyverse)  
+  df %>% 
+    count(inscriptionmentionsLabel) %>% 
+    mutate(perc = n*100 / nrow(df)) -> df2  
+
+ggplot()+
+  geom_col(data = df2, aes(x = reorder(inscriptionmentionsLabel, perc), 
+                           fill = inscriptionmentionsLabel, 
+                           y = n))+
+  labs(y = "count", 
+       x = "inscription mentions",
+       fill = "mentioned words")+
+  geom_text(data = df2, 
+            aes(x = reorder(inscriptionmentionsLabel, perc), 
+                col = inscriptionmentionsLabel, 
+                y = n, 
+                label = paste(round(perc, 0), "%")), 
+            vjust = -0.5, 
+            show.legend = FALSE)+
+  theme_bw()
+    
